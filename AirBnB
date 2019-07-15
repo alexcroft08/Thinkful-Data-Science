@@ -1,0 +1,36 @@
+1. What's the most expensive listing?
+SELECT
+*
+FROM
+sfo_listings
+ORDER BY price DESC
+LIMIT 5
+
+This gives us the top 5 most expensive listings.
+
+
+
+2. What are the most popular neighbourhoods?
+
+SELECT
+neighbourhood,
+COUNT(CASE WHEN availability_365='0' then 1 END) fully_booked
+FROM sfo_listings
+GROUP BY
+neighbourhood
+ORDER BY fully_booked DESC
+
+This gives us the amount of places per neighborhood that are fully booked all year (availability_365 = 0)
+
+3. What is the most expensive time to go to SF
+
+SELECT
+*
+FROM
+sfo_calendar
+WHERE available = 't'
+ORDER BY price DESC;
+
+This gives us the list of the most expensive places and what date they are listed. 
+It's clear the most expensive time to go is between October and January. 
+To find the cheapest listings, simply reverse the Order By to ascending.
