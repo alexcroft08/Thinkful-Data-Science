@@ -1,0 +1,124 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1561\cocoasubrtf610
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 \'97 1 \
+\
+SELECT\
+	table_schema\
+FROM\
+  	INFORMATION_SCHEMA.COLUMNS\
+WHERE\
+	TABLE_NAME = 'naep'\
+\
+\'97 2\
+\
+SELECT \
+	*\
+FROM\
+	naep\
+LIMIT\
+	50;\
+\
+\'97 3\
+SELECT \
+	AVG(avg_math_4_score),\
+	state\
+FROM\
+	naep\
+GROUP BY\
+	state\
+ORDER BY\
+	state\
+\
+\'97 4\
+\
+SELECT \
+	AVG(avg_math_4_score),\
+	state,\
+	MAX(avg_math_4_score) - MIN(avg_math_4_score) as diff\
+FROM\
+	naep\
+GROUP BY\
+	state \
+HAVING\
+	MAX(avg_math_4_score) - MIN(avg_math_4_score)>30\
+ORDER BY\
+	state;\
+\
+\'97 5\
+\
+SELECT \
+	AVG(avg_math_4_score),\
+	state as bottom_10_states\
+FROM\
+	naep\
+GROUP BY\
+	bottom_10_states \
+ORDER BY\
+	AVG(avg_math_4_score) DESC\
+LIMIT \
+	10;\
+\
+\'97 6\
+\
+SELECT \
+	ROUND(AVG(avg_math_4_score) ,2) AS Rounded,\
+	state,\
+	year\
+FROM\
+	naep\
+WHERE\
+	year = 2000\
+GROUP BY\
+	state,\
+	year\
+ORDER BY\
+	Rounded DESC;\
+\
+\'97 7 \
+\
+WITH State_average AS\
+    (SELECT avg(avg_math_4_score) as Avg_state\
+    FROM naep\
+    WHERE year = '2000'\
+    GROUP BY state)\
+SELECT avg_math_4_score AS below_average_states_y2000, state\
+FROM naep, State_average\
+WHERE avg_math_4_score < Avg_state\
+ORDER BY\
+	state ASC;\
+\
+\'97 8 \
+SELECT\
+	state,\
+	avg_math_4_score\
+FROM\
+	naep\
+WHERE\
+	year = 2000 and avg_math_4_score is NULL;\
+\
+\'97 9 \
+\
+SELECT\
+    naep.state,\
+    ROUND(naep.avg_math_4_score, 2),\
+    naep.year,\
+    finance.total_expenditure as expenditure\
+FROM\
+    naep\
+JOIN\
+    finance\
+ON\
+    naep.id = finance.id\
+WHERE\
+	avg_math_4_score IS NOT NULL and naep.year=2000\
+ORDER BY\
+	expenditure DESC;\
+\
+\
+\
+}
