@@ -8,7 +8,8 @@
 \f0\fs24 \cf0 \'97 1 \
 \
 SELECT\
-	table_schema\
+	column_name, \
+	data type\
 FROM\
   	INFORMATION_SCHEMA.COLUMNS\
 WHERE\
@@ -26,6 +27,9 @@ LIMIT\
 \'97 3\
 SELECT \
 	AVG(avg_math_4_score),\
+	MAX(avg_math_4_score),\
+	MIN(avg_math_4_score),\
+	COUNT(avg_math_4_score),\
 	state\
 FROM\
 	naep\
@@ -38,46 +42,39 @@ ORDER BY\
 \
 SELECT \
 	AVG(avg_math_4_score),\
+	MAX(avg_math_4_score),\
+	MIN(avg_math_4_score),\
+	COUNT(avg_math_4_score)\
 	state,\
-	MAX(avg_math_4_score) - MIN(avg_math_4_score) as diff\
 FROM\
 	naep\
 GROUP BY\
 	state \
 HAVING\
-	MAX(avg_math_4_score) - MIN(avg_math_4_score)>30\
-ORDER BY\
-	state;\
+	MAX(avg_math_4_score) - MIN(avg_math_4_score)>30;\
+\
 \
 \'97 5\
 \
 SELECT \
-	AVG(avg_math_4_score),\
 	state as bottom_10_states\
 FROM\
 	naep\
-GROUP BY\
-	bottom_10_states \
+WHERE\
+	year = 2000\
 ORDER BY\
-	AVG(avg_math_4_score) DESC\
+	avg_math_4_score\
 LIMIT \
 	10;\
 \
 \'97 6\
 \
 SELECT \
-	ROUND(AVG(avg_math_4_score) ,2) AS Rounded,\
-	state,\
-	year\
+	ROUND(AVG(avg_math_4_score) ,2) A\
 FROM\
 	naep\
 WHERE\
-	year = 2000\
-GROUP BY\
-	state,\
-	year\
-ORDER BY\
-	Rounded DESC;\
+	year = 2000;\
 \
 \'97 7 \
 \
@@ -94,7 +91,7 @@ ORDER BY\
 \
 \'97 8 \
 SELECT\
-	state,\
+	state as scores_missing_y2000\
 	avg_math_4_score\
 FROM\
 	naep\
@@ -106,7 +103,6 @@ WHERE\
 SELECT\
     naep.state,\
     ROUND(naep.avg_math_4_score, 2),\
-    naep.year,\
     finance.total_expenditure as expenditure\
 FROM\
     naep\
